@@ -1,3 +1,4 @@
+import 'package:bmi/size_config.dart';
 import 'package:flutter/material.dart';
 
 class ReUsable extends StatelessWidget {
@@ -10,7 +11,7 @@ class ReUsable extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration:BoxDecoration(color: color, borderRadius: BorderRadius.circular(10)),
-      margin: EdgeInsets.all(5),
+      margin: EdgeInsets.all(getWidth(10)),
       child: child,
     );
   }

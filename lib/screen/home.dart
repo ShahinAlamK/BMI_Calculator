@@ -1,366 +1,307 @@
-import 'package:bmi/calculat_service.dart';
-import 'package:bmi/screen/details.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../widget/exit_dialog.dart';
-import '../widget/re_usable.dart';
-import '../widget/round_button.dart';
+import '../size_config.dart';
 
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class BimScreen extends StatefulWidget {
+  const BimScreen({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  _BimScreenState createState() => _BimScreenState();
 }
 
-class _HomeState extends State<Home> {
+class _BimScreenState extends State<BimScreen>{
+
+  //BMI Controller
+  double kg=60;
+  int feet=5;
+  int inches=6;
 
   int? selectGender;
   String? genderType;
 
-  int feet=5;
-  int inch=6;
-  int weight=60;
-  int age=25;
-
-  _increment(int type){
-    if(type==0){
-      setState(() {
+  void increaseValue(String type){
+    if(type=="feet"){
+      if(feet<12){
         feet++;
-      });
-    }else if(type==1){
-        setState(() {
-          inch++;
-        });
-    }else if(type==2){
-      setState(() {
-        weight++;
-      });
-    }else if(type==3){
-      setState(() {
-        age++;
-      });
+      }
+    }else if(type=="inches"){
+      if(inches<11){
+        inches++;
+      }
     }
+    setState(() {
 
+    });
   }
-
-  _decrement(int type){
-    if(type==0){
+  void decreaseValue(String type){
+    if(type=="feet"){
       if(feet>0){
-        setState(() {
-          feet--;
-        });
+        feet--;
       }
-
-    }else if(type==1){
-      if(inch>0){
-        setState(() {
-          inch--;
-        });
-      }
-    }else if(type==2){
-      if(weight>0){
-        setState(() {
-          weight--;
-        });
-      }
-    }else if(type==3){
-      if(age>0){
-        setState(() {
-          age--;
-        });
+    }else if(type=="inches"){
+      if(inches>0){
+        inches--;
       }
     }
-  }
+    setState(() {
 
+    });
+  }
   updateGender(int gender) {
     if (gender == 1) {
-      setState(() {
-        selectGender=1;
-        genderType="Male";
-      });
+      selectGender=1;
+      genderType="Male";
     } if (gender == 2) {
-      setState(() {
-        selectGender=2;
-        genderType="Female";
-      });
+      selectGender=2;
+      genderType="Female";
     }
+    setState(() {
+
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    
-    return WillPopScope(
-      onWillPop:()=> exitDialog(context),
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text("bmi calculator".toUpperCase(),
-            style: GoogleFonts.poppins(
-                fontWeight: FontWeight.w700,
-                color: Colors.blueGrey.shade700
-            ),
-          ),
-        ),
+    final theme=Theme.of(context);
+
+    return Scaffold(
+        appBar:AppBar(title: Text("BMI Calculator".toUpperCase()),),
 
         body: Padding(
-          padding: EdgeInsets.only(right: 10, left: 10, top: 10),
+          padding:  EdgeInsets.symmetric(horizontal: getWidth(20)),
           child: Column(
             children: [
 
-              Expanded(child: Row(
+              SizedBox(height: getHeight(25)),
+              Row(
                 children: [
-                  Expanded(child:GestureDetector(
-                        onTap: (){updateGender(1);},
-                        child: ReUsable(
-                          color:selectGender==1?Colors.blueGrey.shade100:Colors.grey.shade100,
-                          child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(Icons.male_outlined,size: 50, color: Colors.blueGrey.shade700),
-                            SizedBox(height: 5,),
-                            Text(
-                              "Male",
-                              style: GoogleFonts.poppins(
-                                  color: Colors.blueGrey.shade700,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500),
-                            )
-                          ],
-                        ),),
-                      )),
                   Expanded(
-                      child: GestureDetector(
-                        onTap: (){updateGender(2);},
-                        child: ReUsable(
-                          color: selectGender==2?Colors.blueGrey.shade100:Colors.grey.shade100,
-                          child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(Icons.female_outlined,size: 50, color: Colors.blueGrey.shade700),
-                            SizedBox(height: 5,),
-                            Text(
-                              "Female",
-                              style: GoogleFonts.poppins(
-                                  color: Colors.blueGrey.shade700,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500),
-                            )
-                          ],
-                        ),),
-                      )),
-                ],
-              )),
-
-              Expanded(child: ReUsable(
-                  color: Colors.grey.shade100,
-                  child: Row(
-                    children: [
-                      Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 25),
+                    child: CardView(
+                      color:selectGender==1?Colors.orange.shade100:Colors.grey.shade100,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text("Feet",
-                            style: GoogleFonts.roboto(
-                                fontSize: width / 100 * 4.5,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(feet.toString(),
-                            style: GoogleFonts.poppins(fontSize: width / 100 * 7,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blueGrey.shade700),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              RoundButton(
-                                  press: () {_decrement(0);},
-                                  icon: Text("-",
-                                      style: GoogleFonts.poppins(
-                                          fontSize: width / 100 * 7,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.orange.shade700))),
-
-                              SizedBox(width: 10,),
-
-                              RoundButton(
-                                  press: () {_increment(0);},
-                                  icon: Text("+",
-                                      style: GoogleFonts.poppins(
-                                          fontSize: width / 100 * 7,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.blueGrey.shade700))),
-                            ],
-                          )
-                        ],
-                      ),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.male_rounded,
+                            size:getWidth(50),
+                            color:Colors.black),
+                        SizedBox(height: getHeight(5)),
+                        Text("Male",style: theme.textTheme.bodyLarge!)
+                      ],
+                    ),
+                      press: (){
+                        updateGender(1);
+                      },
                     ),
                   ),
-                      Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 25),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text("Inch",
-                            style: GoogleFonts.roboto(
-                                fontSize: width / 100 * 4.5,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(inch.toString(),
-                            style: GoogleFonts.poppins(
-                                fontSize: width / 100 * 7,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blueGrey.shade700),
-                          ),
 
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              RoundButton(
-                                  press: () {_decrement(1);},
-                                  icon: Text("-",
-                                      style: GoogleFonts.poppins(
-                                          fontSize: width / 100 * 7,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.orange.shade700))),
-                              SizedBox(width: 10,),
-                              RoundButton(
-                                  press: () {_increment(1);},
-                                  icon: Text("+",
-                                      style: GoogleFonts.poppins(
-                                          fontSize: width / 100 * 7,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.blueGrey.shade700))),
-                            ],
-                          )
-                        ],
-                      ),
+                  SizedBox(width: getWidth(20)),
+                  Expanded(
+                    child: CardView(
+                      color:selectGender==2?Colors.orange.shade100:Colors.grey.shade100,
+                      child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.female_rounded,
+                            size:getWidth(50),
+                            color:Colors.black),
+                        SizedBox(height: getHeight(5)),
+                        Text("Female",style: theme.textTheme.bodyLarge!)
+                      ],
+                    ),
+                      press: (){updateGender(2);},
                     ),
                   ),
-                    ],
-                  ))),
-
-              Expanded(child: Row(
-                children: [
-                  Expanded(child: ReUsable(
-                          color:Colors.grey.shade100,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 25),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text("Weight",
-                            style: GoogleFonts.poppins(
-                                fontSize: width / 100 * 4.5,
-                                fontWeight: FontWeight.bold),),
-                                Text(weight.toString(),
-                              style: GoogleFonts.poppins(fontSize: width / 100 * 7,
-                                fontWeight: FontWeight.bold,
-                                  color: Colors.blueGrey.shade700),),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    RoundButton(
-                                        press: () {_decrement(2);},
-                                        icon: Text("-",
-                                      style: GoogleFonts.poppins(
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.orange.shade700))),
-                                    SizedBox(width: 10,),
-                                    RoundButton(
-                                        press: () {
-                                          _increment(2);
-                                        },
-                                        icon: Text("+",
-                                      style: GoogleFonts.poppins(
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.blueGrey.shade700))),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  )),
-
-                  Expanded(child: ReUsable(
-                        color: Colors.grey.shade100,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 25),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text("Age",
-                                style: GoogleFonts.poppins(fontSize: width / 100 * 4.5,
-                                fontWeight: FontWeight.bold),),
-                              Text(age.toString(),
-                                  style: GoogleFonts.poppins(fontSize: width / 100 * 7,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blueGrey.shade700)),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  RoundButton(
-                                  press: () {_decrement(3);},
-                                      icon: Text("-",
-                                      style: GoogleFonts.poppins(
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.orange.shade700))),
-                                  SizedBox(width: 10,),
-                                  RoundButton(
-                                  press: () {_increment(3);},
-                                  icon: Text("+",
-                                      style: GoogleFonts.poppins(
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.blueGrey.shade700))),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  )),
                 ],
-              )),
-
-              SizedBox(height: 10,),
-              SizedBox(
-                height: 55,
-                width: double.infinity,
-                child: ElevatedButton(
-                    onPressed: selectGender==null?null:() {
-                      final bmi=CalculateBMI(feet:feet,inch:inch,weight:weight);
-                      Navigator.push(context,MaterialPageRoute(builder: (_)=>Details(
-                          result: bmi.calculate(),
-                          status: bmi.getResult(),
-                          suggest: bmi.getSuggest()
-                      )));
-                    },
-                    child: Text("calculate".toUpperCase(),
-                      style: GoogleFonts.poppins(
-                          fontSize: 20,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600),
-                    )),
               ),
-              SizedBox(height: 15)
+
+              SizedBox(height: getHeight(25)),
+              Expanded(child: CardView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Your Weight",style: theme.textTheme.bodyLarge,),
+                    Text("${kg.toStringAsFixed(0)} kg",style: theme.textTheme.bodyLarge,),
+                    SliderTheme(
+                      data: SliderThemeData(
+                        activeTrackColor: Colors.orange,
+                        thumbColor: Colors.orange
+                      ),
+                      child: Slider(
+                        min: 0.0,
+                          max: 120,
+                          value:kg,
+                          onChanged:  (value){
+                          setState(() {
+                            kg=value.toDouble();
+                          });
+                          }),
+                    ),
+                  ],
+                ),
+              )),
+
+              SizedBox(height: getHeight(25)),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: CardView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Feet",style: theme.textTheme.bodyLarge,),
+                          Text("$feet",style: theme.textTheme.bodyMedium!.copyWith(fontSize: getWidth(22)),),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              RoundButton(icon: Icon(Icons.remove), press:(){decreaseValue("feet");}),
+                              RoundButton(icon: Icon(Icons.add), press:(){increaseValue("feet");}),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: getWidth(20)),
+                  Expanded(
+                    child: CardView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Inches",style: theme.textTheme.bodyLarge,),
+                          Text("$inches",style: theme.textTheme.bodyMedium!.copyWith(fontSize: getWidth(22)),),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              RoundButton(icon: Icon(Icons.add), press:(){increaseValue("inches");}),
+                              RoundButton(
+                                  icon: Icon(Icons.remove),
+                                  press:(){decreaseValue("inches");}),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: getHeight(30)),
+
+              SizedBox(
+                  height: getHeight(50),
+                  width: double.infinity,
+                  child: ElevatedButton(
+                      onPressed:genderType==null?null:(){
+                        showCupertinoDialog(context: context, builder: (_){
+                          final bmi=CalculateBMI(feet: feet, inch: inches, weight: kg.toInt(), gender: genderType!);
+                        return ResultDialog(
+                          bmi: bmi.calculate(),
+                          result: bmi.getResult(),
+                          gender:bmi.gender,
+                          height:[bmi.feet,bmi.inch],
+                          weight:bmi.weight,
+                        );
+                      });},
+                      child: Text("calculate".toUpperCase(),
+                        style: theme.textTheme.bodyLarge))),
+
+              SizedBox(height: getHeight(25)),
+            ],
+          ),
+        )
+    );
+  }
+}
+
+class RoundButton extends StatelessWidget {
+  const RoundButton({super.key, required this.icon, required this.press, this.colo});
+  final Widget icon;
+  final VoidCallback press;
+  final Color? colo;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(50),
+      child:Material(
+        color:colo?? Colors.white,
+        child: InkWell(
+          onTap:press,
+          child: Container(
+            decoration: const BoxDecoration(
+                shape: BoxShape.circle
+            ),
+            padding: EdgeInsets.all(getWidth(7)),
+            child:icon,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ResultDialog extends StatelessWidget {
+  const ResultDialog({super.key,
+    required this.bmi,
+    required this.gender,
+    required this.weight,
+    required this.height,
+    required this.result});
+
+  final String bmi;
+  final String result;
+  final String gender;
+  final int weight;
+  final List<int> height;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme=Theme.of(context);
+
+    return Dialog(
+      child: Container(
+        padding: EdgeInsets.all(getWidth(20)),
+        width:double.infinity,
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              Text("Your Result",style:theme.textTheme.bodyLarge,),
+              const Divider(),
+
+              SizedBox(height: getHeight(20)),
+              Text(bmi,style: theme.textTheme.bodyLarge!.copyWith(fontSize:getWidth(50))),
+
+              SizedBox(height: getHeight(20)),
+              Text(result,style:theme.textTheme.bodyLarge,),
+
+              SizedBox(height: getHeight(30)),
+
+              Row(
+                children: [
+                  Expanded(child: Text("Gender : $gender",style: theme.textTheme.bodySmall,)),
+                  Expanded(child: Text("Weight : $weight kg",style: theme.textTheme.bodySmall)),
+                  Expanded(child: Text("Height : ${height[0]} .${height[1]} inch",style: theme.textTheme.bodySmall)),
+                ],
+              ),
+
+              SizedBox(height: getHeight(20)),
+
+              SizedBox(
+                  height: getHeight(45),
+                  width: AppSize.width,
+                  child: ElevatedButton(
+                      onPressed:(){
+                        Navigator.pop(context);
+                      },
+                      child:Text("Re-calculate".toUpperCase()))),
+
+              SizedBox(height: getHeight(10)),
 
             ],
           ),
@@ -370,10 +311,72 @@ class _HomeState extends State<Home> {
   }
 }
 
+class CardView extends StatelessWidget {
+  const CardView({super.key, this.child, this.press, this.color});
+  final Widget? child;
+  final VoidCallback? press;
+  final Color? color;
 
+  @override
+  Widget build(BuildContext context) {
+    final theme=Theme.of(context);
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(getWidth(10)),
+      child: Material(
+        color: color??Colors.grey.shade100,
+        child: InkWell(
+          onTap:press,
+          child: Container(
+            height: getHeight(180),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(getWidth(10))
+            ),
+            padding: EdgeInsets.symmetric(horizontal: getWidth(20),vertical: getHeight(15)),
+            child:child,
+          ),
+        ),
+      ),
+    );
+  }
+}
 
+class CalculateBMI{
+  CalculateBMI({
+    required this.feet,
+    required this.inch,
+    required this.weight,
+    required this.gender
+  });
+  final int feet;
+  final int inch;
+  final int weight;
+  final String gender;
 
+  var bmi;
 
+  String calculate(){
+    final height=(feet*12)+inch;
+    final h=(height*0.0254);
+    bmi=weight/(h*h);
+    return bmi.toStringAsFixed(1);
+  }
 
+  String getResult(){
+    if(bmi>=25){
+      return "Overweight";
+    }else if(bmi>18.5){
+      return "Normal";
+    }
+    return "Underweight";
+  }
 
-
+  String getSuggest(){
+    if(bmi>=25){
+      return "You have higher then normal body weight. Try to exercise more.";
+    }else if(bmi>18.5){
+      return "You have normal body weight. Good job!";
+    }
+    return "You have a lower then normal body weight. You can eat a bit more.";
+  }
+}

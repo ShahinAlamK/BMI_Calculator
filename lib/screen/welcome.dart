@@ -1,4 +1,5 @@
 import 'package:bmi/screen/home.dart';
+import 'package:bmi/size_config.dart';
 import 'package:bmi/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -21,7 +22,7 @@ class _WelcomeState extends State<Welcome> {
     final size=MediaQuery.of(context).size;
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
+        padding: EdgeInsets.symmetric(horizontal: getWidth(20)),
         child: Column(
           children: [
             Expanded(
@@ -80,13 +81,13 @@ class _WelcomeState extends State<Welcome> {
             SizedBox(height: 30),
 
             SizedBox(
-              height:55,
-              width: size.width,
+              height:getHeight(55),
+              width:double.infinity,
               child: ElevatedButton(
                   onPressed: (){
-                    Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (_)=>Home()), (route) => false);
+                    Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (_)=>BimScreen()), (route) => false);
                   },
-                  child: Text("Start",style:GoogleFonts.poppins(fontSize: 18,color: Colors.white),)),
+                  child: Text("Start".toUpperCase(),style:Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.white))),
             ),
             SizedBox(height: 30)
           ],
